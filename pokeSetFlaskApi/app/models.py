@@ -14,7 +14,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String, unique=True)
     token = db.Column(db.String)
     password = db.Column(db.String)
-    gameScores = db.relationship('ScoresTable', backref='user', lazy=True)
+    game_scores = db.relationship('Scores_Table', backref='user', lazy=True)
 
     def __repr__(self):
         return f'User {self.username}'
@@ -35,8 +35,9 @@ class User(UserMixin, db.Model):
     def get_id(self): # this gets called automatically by flask_login when needed
         return str(self.user_id)
     
-class ScoresTable(db.Model):
+class Scores_Table(db.Model):
     game_id = db.Column(db.Integer, primary_key=True)
-    setsFound = db.Column(db.Integer)
-    gameDate = db.Column(db.DateTime, default = datetime.utcnow)
+    sets_found = db.Column(db.Integer)
+    game_date = db.Column(db.DateTime, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    username = db.Column(db.String)
