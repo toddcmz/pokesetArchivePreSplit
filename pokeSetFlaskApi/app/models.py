@@ -41,3 +41,10 @@ class Scores_Table(db.Model):
     game_date = db.Column(db.DateTime, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     username = db.Column(db.String)
+
+    def __repr__(self):
+        return f'Game ID {self.game_id}'
+    
+    def commit(self):
+        db.session.add(self)
+        db.session.commit()

@@ -50,8 +50,8 @@ def api_scores():
 
 # receive all scores from a single user
 @bp.get('/scores/<username>')
-@token_required
-def user_scores(thisUser, username):
+#@token_required
+def user_scores(username):
     thisUser = User.query.filter_by(username=username).first().user_id
     if thisUser: # if they give us a username we query for it, if there's no match then the username give was invalid
         theseGames = Scores_Table.query.filter_by(user_id=thisUser)
@@ -67,14 +67,14 @@ def user_scores(thisUser, username):
 
 # Log a new completed game score
 @bp.post('/newScore')
-@token_required
-def log_newScore(thisUser):
+#@token_required
+def log_newScore():
     try:
         #receive the post data for logging a new game
         thisContent = request.json
-        thisUserId = thisContent.get('user_id')
+        thisUserId = int(thisContent.get('user_id'))
         thisUsername = thisContent.get('username')
-        thisSetsFound = thisContent.get('sets_found')
+        thisSetsFound = int(thisContent.get('sets_found'))
         thisNewGame = Scores_Table(user_id = thisUserId,
                                    username = thisUsername,
                                    sets_found = thisSetsFound)
