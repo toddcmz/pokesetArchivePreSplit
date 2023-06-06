@@ -1,0 +1,4 @@
+venv_pokeset/
+.env
+__pycache__/
+

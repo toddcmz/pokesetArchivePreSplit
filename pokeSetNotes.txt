@@ -1,0 +1,68 @@
+
+### WATCHING GAME TUTORIAL VIDEOS ###
+
+React Game Tutorial - Build Tic Tac Toe Game
+Coding with Basir
+https://www.youtube.com/watch?v=2hw7bg-gNRA
+
+he said that we're going to use position and top
+on the .btn styling to create animation when
+the user hovers over something.
+
+note that this works with .btn:hover because
+we're adjusting top by 4px, then subtracting those
+4 px off of both shadow colors, with 12 to 8 on teh blue,
+and 18 to 14 on the grey underneath. pretty cool.
+
+now we're adding logic using Reducer in this application.
+
+to manage the state of the game, we're going to use reducer.
+
+net ninja Reducer:
+pattern of coding which centralizes all of our methods
+for changing state into a single function.
+
+IF we have a big program, there might be a bunch of functions
+that all change state. If we're having to pass all those functions
+as props to our components that use them, then they all have to 
+be passed separately. Instead, we could consolidate all those functions
+into one reducer function.
+
+This is just a coding pattern. You don't have to use them if you don't
+want to.
+
+First we have our reducer function. This interacts with our state and data.
+Contains all of our state manipulation logic.
+
+Then we have an action object that describes the type of change we want to make.
+
+Finally we have a dispatch function that sends the action to the reducer.
+
+We call the action, it gets dispatched to the reducer, and it makes the
+change to the state.
+
+First we make an action object which describes what we want to make.
+
+	{type:'ADD_BOOK', book:{title=... author=...}} // this is the action
+
+then we dispatch this to the reducer:
+
+	reducer(action, state)
+
+the reducer is going to check the type fo the action, then update the state
+we've told it to update based on what it finds. 
+-- checks action type
+-- updates the state object
+-- returns the state
+
+in the above case, it would add a book to the appropriate state.
+
+The syntax is a little complicated, but in essence we're just bunding
+all the logic from our separate "state updater" methods and putting
+them all into one big method. This is a bit surprising, I wouldn't think
+this would jive well with oop ideologies, but hey.
+
+Got into crazy complicated code with not the greatest structure IMO. moving on.
+
+
+
