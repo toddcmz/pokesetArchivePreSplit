@@ -1,3 +1,24 @@
+### Dev notes ###
+
+started with flask backend, mostly to hit API endpoints.
+register new user
+sign in
+add new game score
+retrieve game scores
+
+got all of the above working, tested with insomnia.
+was not working with token - would need help understanding
+this piece.
+
+pushed to render:
+https://pokesetapi.onrender.com
+
+Started setting up react front.
+
+Made shells for sign in, register, landing, and play game.
+Implemented auth context
+
+
 
 ### WATCHING GAME TUTORIAL VIDEOS ###
 

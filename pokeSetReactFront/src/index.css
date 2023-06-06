@@ -1,0 +1,26 @@
+*{
+  box-sizing: border-box;
+}
+
+.flexMeRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+a{
+  color: white;
+}
+
+.headerContainer{
+  height: 60px;
+  width: 100%;
+  background: rgb(42, 42, 71);
+  color: white;
+  padding: 10px;
+  align-items: center;
+}
+
+.navButton{
+  margin-right: 15px;
+  }
