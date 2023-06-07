@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import GameBoard from "./GameBoard"
 
 
 export default function ChoosePokemon() {
@@ -50,34 +51,7 @@ export default function ChoosePokemon() {
             <br /><br />
             <button>Catch 'em!</button>
         </form>
-        {/* <ul>
-            <img className="pmonSprite" src={`${pmonImages[0]}`} alt='poke1 icon'/>
-            <br />
-            <img className="pmonSprite" src={`${pmonImages[1]}`} alt='poke2 icon'/>
-            <br />
-            <img className="pmonSprite" src={`${pmonImages[2]}`} alt='poke3 icon'/>
-            {pmonImages.map((theseImages)=>(
-                <li>
-                    <img className="pmonSprite" src={`${theseImages}`} alt='a poke icon'/>
-                </li>
-            ))}
-        </ul> */}
-        <div className="flexMeRow demoAllCardsContainer">
-            <div className="outerCard">
-            <div className="setCard cardBack1 cardBorder1 flexMeColumn pokePosition1">
-                <img className="pmonSprite" src={`${pmonImages[0]}`} alt="" />
-            </div>
-            </div>
-            <div className="setCard cardBack2 cardBorder2 flexMeColumn pokePosition2">
-                <img className="pmonSprite" src={`${pmonImages[1]}`} alt="" />
-                <img className="pmonSprite" src={`${pmonImages[1]}`} alt="" />
-            </div>
-            <div className="setCard cardBack3 cardBorder3 flexMeColumn pokePosition3">
-                <img className="pmonSprite" src={`${pmonImages[2]}`} alt="" />
-                <img className="pmonSprite" src={`${pmonImages[2]}`} alt="" />
-                <img className="pmonSprite" src={`${pmonImages[2]}`} alt="" />
-            </div>
-        </div>
+        <GameBoard imgUrls={pmonImages}/>
     </>
   )
 }

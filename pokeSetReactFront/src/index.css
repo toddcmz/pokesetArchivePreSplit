@@ -1,5 +1,7 @@
 *{
   box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
 }
 
 body{
@@ -21,7 +23,16 @@ a, h3{
 
 .navButton{
   margin-right: 15px;
-  }
+  height: 30px;
+  width: 125px;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.navButton:hover{
+  background-color: rgb(45, 86, 121);
+  border-radius: 10px;
+}
 
 .flexMeRow{
   display: flex;
@@ -58,33 +69,57 @@ a, h3{
   width: 110px;
   justify-content: space-evenly;
   align-items: center;
+  margin: 5px 5px 5px 5px;
 }
 
-.cardBack1{
+.cardBack0{
   background-color: rgb(204, 224, 241);
 }
 
-.cardBack2{
+.cardBack1{
   background-color: rgb(228, 175, 175);
 }
 
-.cardBack3{
+.cardBack2{
   background-color: rgb(238, 238, 173);
 }
 
-.cardBorder1{
+.cardBorder0{
   border: 6px rgb(112, 58, 112) dashed;
 }
 
-.cardBorder2{
-  border: 6px rgb(112, 58, 112) solid;
+.cardBorder1{
+  border: 6px brown solid;
 }
 
-.cardBorder3{
-  border: 6px rgb(112, 58, 112) none;
+.cardBorder2{
+  border: none;
 }
 
 .pmonSprite{
   height: 70px;
   width: 70px;
+}
+
+/* this is the container for the entire board */
+.gameBoardContainer{
+  height: 750px;
+  width: 600px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1em;
+}
+
+/* these are the spots on the board where cards will be placed
+This does not include styling for the card itself. */
+.cardSlot{
+border-radius: 5px;
+height: 230px;
+width: 120px;
+}
+
+.cardSlot:hover{
+  background-color: white;
 }

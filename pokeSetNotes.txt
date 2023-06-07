@@ -43,6 +43,19 @@ to generate a "card." I should try ot generate a 1, 2, and 3 pokemon
 card using all three choices. I can do this in rows below the current
 register button.
 
+Succeeded. Now I need to generate a deck and lay out all the cards,
+then work on being able to click on cards and do something
+with the cards clicked.
+
+
+validate pokemon choices
+
+send score to back end
+
+see my scores
+
+see all high scores
+
 
 ### WATCHING GAME TUTORIAL VIDEOS ###
 
