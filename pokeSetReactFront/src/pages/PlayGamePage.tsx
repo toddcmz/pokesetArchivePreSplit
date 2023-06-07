@@ -1,7 +1,10 @@
+import ChoosePokemon from "../components/ChoosePokemon";
 
 
 export default function PlayGamePage() {
   return (
-    <div>PlayGamePage</div>
+    <div>
+      <ChoosePokemon />
+    </div>
   )
 }

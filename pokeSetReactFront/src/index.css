@@ -2,13 +2,11 @@
   box-sizing: border-box;
 }
 
-.flexMeRow{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+body{
+  background-color: rgb(102, 104, 105);
 }
 
-a{
+a, h3{
   color: white;
 }
 
@@ -24,3 +22,69 @@ a{
 .navButton{
   margin-right: 15px;
   }
+
+.flexMeRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.flexMeColumn{
+  display: flex;
+  flex-direction: column;
+}
+
+.demoAllCardsContainer{
+  justify-content: space-evenly;
+}
+
+.outerCard{
+  height: 225px;
+  width: 115px;
+  border-radius: 10px;
+}
+
+.outerCard:hover{
+  border: 3px white solid;
+}
+
+.outerCard:active{
+  border: 3px yellow solid;
+}
+
+.setCard{
+  border-radius: 10px;
+  height: 220px;
+  width: 110px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.cardBack1{
+  background-color: rgb(204, 224, 241);
+}
+
+.cardBack2{
+  background-color: rgb(228, 175, 175);
+}
+
+.cardBack3{
+  background-color: rgb(238, 238, 173);
+}
+
+.cardBorder1{
+  border: 6px rgb(112, 58, 112) dashed;
+}
+
+.cardBorder2{
+  border: 6px rgb(112, 58, 112) solid;
+}
+
+.cardBorder3{
+  border: 6px rgb(112, 58, 112) none;
+}
+
+.pmonSprite{
+  height: 70px;
+  width: 70px;
+}

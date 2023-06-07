@@ -22,6 +22,9 @@ export default function Header(){
                     <NavLink to='/play'>Play Pokeset</NavLink>
                 </div>
                 <div className="navButton">
+                    <NavLink to='/rules'>Rules of Set</NavLink>
+                </div>
+                <div className="navButton">
                     <NavLink to='/logout'>Log Out</NavLink>
                 </div>
             </div>

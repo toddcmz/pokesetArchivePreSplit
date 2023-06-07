@@ -17,7 +17,31 @@ Started setting up react front.
 
 Made shells for sign in, register, landing, and play game.
 Implemented auth context
+Implemented register new user, this is working as expected,
+elephant SQL updates properly. 
 
+Switching from this over actual game functionality.
+
+First goal is to access poke api and retrieve images,
+then save them somehow in the app. I would think
+we could save them in a useState object.
+
+Let's first just try to access them and get them to 
+display. So make a single form with a button and try
+to get the pokemon in that form to come up.
+
+Let's try taking from generation-iii, firered-leafgreen, front_default
+
+with urls successfully retrieved, I can pass them as props inside
+useState to the next page, I think, for rendering the game.
+
+Okay, did eventually get all three chosen pokemon to render.
+Boy is error handling going to be a problem.
+
+I think next step is going to be forcing a consistent size, then trying
+to generate a "card." I should try ot generate a 1, 2, and 3 pokemon
+card using all three choices. I can do this in rows below the current
+register button.
 
 
 ### WATCHING GAME TUTORIAL VIDEOS ###
