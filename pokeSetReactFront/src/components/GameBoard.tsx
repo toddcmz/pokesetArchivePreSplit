@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CardSlot from "./CardSlot"
+import MakeDeck from './TheDeck'
 
 export type Card = {
     cardId:number
@@ -10,7 +11,7 @@ export type Card = {
 }
 
 export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
-    
+
     // use state to show status of selections, maybe?
     const [foundSetStatus, setFoundSetStatus] = useState<string>('Awaiting game start')
 
@@ -19,78 +20,93 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
 
     // this will help the user keep track of where they are in set choosing, probably
     // a temporary way of handling this for now
-    const [userTimesClicked, setUserTimesClicked] = useState<string>("No cards selected")
+    const [userTimesClicked, setUserTimesClicked] = useState<string>("Cards clicked: 0")
 
     //keep track of total sets found this game
     const [setsFound, setSetsFound] = useState(0)
 
-    // originally I had the cardPmonImgUrl set to imgUrls[0] and so on, but for
-    // some reason I can't figure out those don't get passed through on re-render.
-    // They're all fine here, but when we go to call cardslot with each card,
-    // the urls don't make it through, and turn in to undefined. couldn't figure
-    // that out, so trying a workaround.
-    // the .sort Math.random() is from the memory game video tutorial I watched.
-    // what is the -0.5 doing there?
-    const[boardCards, setBoardCards] = useState<Card[]>([
-        {cardId:0, cardBack:0, cardBorder:2, cardPmonCount:3, cardPmonImgUrl:2},
-        {cardId:1, cardBack:0, cardBorder:0, cardPmonCount:3, cardPmonImgUrl:2},
-        {cardId:2, cardBack:0, cardBorder:0, cardPmonCount:1, cardPmonImgUrl:2},
-        {cardId:3, cardBack:0, cardBorder:0, cardPmonCount:1, cardPmonImgUrl:0},
-        {cardId:4, cardBack:1, cardBorder:0, cardPmonCount:1, cardPmonImgUrl:0},
-        {cardId:5, cardBack:1, cardBorder:1, cardPmonCount:1, cardPmonImgUrl:0},
-        {cardId:6, cardBack:1, cardBorder:1, cardPmonCount:2, cardPmonImgUrl:0},
-        {cardId:7, cardBack:1, cardBorder:1, cardPmonCount:2, cardPmonImgUrl:1},
-        {cardId:8, cardBack:2, cardBorder:1, cardPmonCount:2, cardPmonImgUrl:1},
-        {cardId:9, cardBack:2, cardBorder:2, cardPmonCount:2, cardPmonImgUrl:1},
-        {cardId:10, cardBack:2, cardBorder:2, cardPmonCount:3, cardPmonImgUrl:1},
-        {cardId:11, cardBack:2, cardBorder:2, cardPmonCount:3, cardPmonImgUrl:2}
-    ].sort(()=> Math.random() - 0.5))
+    // make the original game deck, this is constructed in TheDeck component
+    const[deckCards, setDeckCards] = useState<Card[]>(MakeDeck())
 
+    // make the initial game board, first 12 cards of the game deck.
+    // what I want is to remove those cards from the deck, preferrably
+    // the final 12 cards, actually, but react documentation is telling me not to mutate
+    // things like that. Maybe I can figure out how to use some sort of
+    // "where in the deck are we" pointer? I suppose I could just pull a random
+    // card for now. It would be nice to figure out the pointer, though.
+    const[boardCards, setBoardCards] = useState<Card[]>(deckCards.slice(0,12))
 
-    function handleClick(selectedCard:Card):void{
-        console.log('initial call',userSelections)
-        if (userSelections.length === 0 || userSelections.length === 1){
-            setUserSelections(userSelections => [...userSelections, selectedCard])
-            userSelections.length === 0? setUserTimesClicked('1 card clicked') : setUserTimesClicked('2 cards clicked')
-            setFoundSetStatus('Player is choosing cards...')
-            //okay, interestingly, this console log spits out an empty array on first click,
-            // because of the order in which things render/happen. this is why I couldn't 
-            // yet access userSelections[2] in the else statement below.
-            console.log('within if statement',userSelections)
-            return
-        }else{
-            // here, there are two cards already selected, add the third and check
-            // if the user selected a set
-            //setUserSelections(userSelections => [...userSelections, selectedCard])
-            // do set checks with the new Set functionality.
-            // for each trait, all cards must have all the same characteristic
-            // or all different characteristics. A set() (javascript set) of
-            // three characteristics will be length 1 if all the same, or length
-            // three if all different.
-            // at this stage, userSelections I thought would have 3 elements, but that's
-            // misunderstanding the timing of how objects change in react with state. Instead, I just
-            // have the first two cards. That's okay, because I have the third card in selectedCard, so I'll
-            // just use that instead.
-            let borderSet = [...new Set([userSelections[0].cardBorder, userSelections[1].cardBorder, selectedCard.cardBorder])]
-            let backgroundSet = [...new Set([userSelections[0].cardBack, userSelections[1].cardBack, selectedCard.cardBack])]
-            let pokeNumSet = [...new Set([userSelections[0].cardPmonCount, userSelections[1].cardPmonCount, selectedCard.cardPmonCount])]
-            let spriteSet = [...new Set([userSelections[0].cardPmonImgUrl, userSelections[1].cardPmonImgUrl, selectedCard.cardPmonImgUrl])]
-            console.log('border:', borderSet)
-            console.log('back:', backgroundSet)
-            console.log('num:', pokeNumSet)
-            console.log('sprite:', spriteSet)
-            console.log('id1:',userSelections[0].cardId, 'id2:',userSelections[1].cardId, 'id3:',selectedCard.cardId)
+    // so, let's try the pointer method for the deck to figure out where we are.
+    // we could add logic down the line to generate a new deck and a new board
+    // if we reach the end of the deck, probably within the useEffect. Starts
+    // at twelve out of the gate, the index of the next card in the shuffled
+    // starting deck to deal out.
+    const[deckPointer, setDeckPointer] = useState(12)
+
+    //useEffect to trigger updates to the top 4 states listed above when
+    // the userSelections state array has 3 cards in it. if it has 0
+    // or 1 card in it, we just update the status states associated with
+    // giving the user info about what's going on in the game. If length
+    // is 3, then we're going to run our set checks and update things
+    // accordingly.
+    useEffect(()=>{
+        // this is the "check if a set case"
+        if(userSelections.length === 3){
+            let borderSet = [...new Set([userSelections[0].cardBorder, userSelections[1].cardBorder, userSelections[2].cardBorder])]
+            let backgroundSet = [...new Set([userSelections[0].cardBack, userSelections[1].cardBack, userSelections[2].cardBack])]
+            let pokeNumSet = [...new Set([userSelections[0].cardPmonCount, userSelections[1].cardPmonCount, userSelections[2].cardPmonCount])]
+            let spriteSet = [...new Set([userSelections[0].cardPmonImgUrl, userSelections[1].cardPmonImgUrl, userSelections[2].cardPmonImgUrl])]
             // do the comparisons to determine valid set based on above 4 objects lengths, just none of them can be of length 2.
             if(borderSet.length !== 2 && backgroundSet.length !== 2 && pokeNumSet.length !== 2 && spriteSet.length !== 2){
                 setFoundSetStatus("Yay! That's a valid set!")
                 setSetsFound(setsFound + 1)
+                setUserSelections([])
+                setUserTimesClicked("Cards clicked: 0")
+                // can I add code here to filter the board by the card IDs that were a set?
+                // let's try that to show removal from board...
+                setBoardCards((boardCards) => boardCards.filter(
+                    (card)=> card.cardId !== userSelections[0].cardId 
+                    && 
+                    card.cardId !== userSelections[1].cardId 
+                    && 
+                    card.cardId !== userSelections[2].cardId
+                    )
+                )
+                // okay, that filters out a found set just fine...can I add more cards to 
+                // board cards? sadly it does rearrange the board, which I don't want, but
+                // my gut is telling me that might end up being a bit of a thorny issue...
+
+            // otherwise not a valid set
             }else{
                 setFoundSetStatus("Sorry, that's not a set. Try again.")
+                setUserSelections([])
+                setUserTimesClicked("Cards clicked: 0")
             }
-            // restore userSelections state to an empty array. I think there may be a timing issue on this as well...
-            setUserTimesClicked('No cards selected')
-            setUserSelections([])
+        // update message states if there's 2 cards in the array
+        }else if(userSelections.length === 2 || userSelections.length === 1){
+            setUserTimesClicked(`Cards clicked: ${userSelections.length}`)
+            setFoundSetStatus('Player is choosing cards...')
         }
+        // otherwise the array is empty and we do nothing.
+    },[userSelections])
+
+    // maybe I need a second useEffect that runs on board cards when they're removed?
+    useEffect(()=>{
+        if(boardCards.length === 9){
+            setBoardCards([...boardCards, 
+                            deckCards[deckPointer], 
+                            deckCards[deckPointer+1],
+                            deckCards[deckPointer+2]])
+            //then update the deck pointer
+            setDeckPointer(deckPointer + 3)
+        }
+    },[boardCards])
+
+    // I could probably add a useEffect if this works to check the deck pointer and 
+    // generate a newly shuffled deck. This could be useful.
+
+    function handleClick(selectedCard:Card):void{
+        setUserSelections(userSelections => [...userSelections, selectedCard])
     }
 
     return (

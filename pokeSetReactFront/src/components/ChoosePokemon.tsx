@@ -41,6 +41,8 @@ export default function ChoosePokemon() {
     <>
         <div> 
             <h3>Choose Pokemon</h3>
+            <h5>Warning: choose pkmn validation not yet implemented. Pkmn through emerald gen are available.</h5>
+            <h5>Refresh page and choose new pkmn if not all cards display a sprite.</h5>
         </div>
         <form onSubmit={handleChoosePokemonForm}>
             <input type="text" placeholder="Pokemon 1" ref={pmon1Field}/>

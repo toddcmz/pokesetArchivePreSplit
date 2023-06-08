@@ -47,6 +47,9 @@ Succeeded. Now I need to generate a deck and lay out all the cards,
 then work on being able to click on cards and do something
 with the cards clicked.
 
+Went to setting up gameboard spots first. made 4x3 grid of divs 
+to be the game board. Idea is cards will be placed inside each div.
+
 
 validate pokemon choices
 

@@ -27,5 +27,4 @@ export function AuthProvider({ children }:{children: JSX.Element | JSX.Element[]
     return(
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
     )
-
 }

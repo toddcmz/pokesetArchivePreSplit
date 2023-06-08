@@ -25,6 +25,9 @@ export default function Header(){
                     <NavLink to='/rules'>Rules of Set</NavLink>
                 </div>
                 <div className="navButton">
+                    <NavLink to='/highscores'>High Scores</NavLink>
+                </div>
+                <div className="navButton">
                     <NavLink to='/logout'>Log Out</NavLink>
                 </div>
             </div>

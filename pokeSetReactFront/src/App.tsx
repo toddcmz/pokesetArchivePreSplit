@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage"
 import SignInPage from "./pages/SignInPage"
 import PlayGamePage from "./pages/PlayGamePage"
 import RulesPage from "./pages/RulesPage"
+import HighScoresPage from "./pages/HighScoresPage"
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path='/signin' element = { <SignInPage /> } />
             <Route path='/play' element = { <PlayGamePage /> } />
             <Route path='/rules' element = { <RulesPage /> } />
+            <Route path='/highscores' element = { <HighScoresPage /> } />
             <Route path='*' element = { <Navigate to='/' />} />
           </Routes>
       </BrowserRouter>  
