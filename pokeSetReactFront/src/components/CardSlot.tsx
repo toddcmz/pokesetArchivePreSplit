@@ -1,11 +1,17 @@
+import { Card } from './GameBoard'
+
+export default function CardSlot({eachCard, imgUrls, handleClick}:{eachCard:Card, imgUrls:string[]}) {
 
 
-export default function CardSlot({eachCard, imgUrls}) {
 
   return (
     <div className="cardSlot">
         {/* Outer div is the whole card, with css styling provided through props from eachCard */}
-        <div className={`setCard flexMeColumn cardBack${eachCard.cardBorder} cardBorder${eachCard.cardBorder}`}>
+        <div className={`setCard flexMeColumn 
+                        cardBack${eachCard.cardBack} 
+                        cardBorder${eachCard.cardBorder}`
+                    }
+                    onClick={()=> handleClick(eachCard)}    >
             {/* following logic determines the number of sprites that get rendered
             for that card. wanted urls to come in as part of the eachCard object,
             something about the timing over which everythign happens wasn't right
