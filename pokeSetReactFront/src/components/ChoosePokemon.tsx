@@ -39,6 +39,7 @@ export default function ChoosePokemon() {
     }
   return (
     <>
+
         <div> 
             <h3>Choose Pokemon</h3>
             <h5>Warning: choose pkmn validation not yet implemented. Pkmn through emerald gen are available.</h5>
@@ -46,11 +47,8 @@ export default function ChoosePokemon() {
         </div>
         <form onSubmit={handleChoosePokemonForm}>
             <input type="text" placeholder="Pokemon 1" ref={pmon1Field}/>
-            <br /><br />
             <input type="text" placeholder="Pokemon 2" ref={pmon2Field}/>
-            <br /><br />
             <input type="text" placeholder="Pokemon 3" ref={pmon3Field}/>
-            <br /><br />
             <button>Catch 'em!</button>
         </form>
         <GameBoard imgUrls={pmonImages}/>

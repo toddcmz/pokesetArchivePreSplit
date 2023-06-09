@@ -28,6 +28,9 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
     // make the original game deck, this is constructed in TheDeck component
     const[deckCards, setDeckCards] = useState<Card[]>(MakeDeck())
 
+    //this controls how many extra rows can be added and is mostly proof of concept
+    const[extraRow, setExtraRow] = useState(0)
+
     // make the initial game board, first 12 cards of the game deck.
     // what I want is to remove those cards from the deck, preferrably
     // the final 12 cards, actually, but react documentation is telling me not to mutate
@@ -90,7 +93,7 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
         // otherwise the array is empty and we do nothing.
     },[userSelections])
 
-    // maybe I need a second useEffect that runs on board cards when they're removed?
+    // this use effect fills in the spots on the board when a valid set is found
     useEffect(()=>{
         if(boardCards.length === 9){
             setBoardCards([...boardCards, 
@@ -102,6 +105,19 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
         }
     },[boardCards])
 
+    // this will handle the extra row request. !==0 handles game start, where
+    // there should not be an extra row
+    useEffect(()=>{
+        if(extraRow !==0 && boardCards.length < 14){
+            setBoardCards([...boardCards, 
+                            deckCards[deckPointer], 
+                            deckCards[deckPointer+1],
+                            deckCards[deckPointer+2]])
+            //then update the deck pointer
+            setDeckPointer(deckPointer + 3)
+        }
+    },[extraRow])
+
     // I could probably add a useEffect if this works to check the deck pointer and 
     // generate a newly shuffled deck. This could be useful.
 
@@ -109,16 +125,30 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
         setUserSelections(userSelections => [...userSelections, selectedCard])
     }
 
+    // this just forces the state of extra row to change every time the button is clicked.
+    // you only get an extra row if you don't already have one, logic taken care of in
+    // the useEffect that has extraRow in its dependency array. Actual value of extra
+    // row doesn't matter, but it is something that could be tracked and
+    // included in the user score, which could be cool.
+    function handleExtraRow():void{
+        setExtraRow(extraRow+1)
+    }
+
     return (
     <>
-        <h3>{foundSetStatus}</h3>
-        <h3>{userTimesClicked}</h3>
-        <h3>Sets Found: {setsFound}</h3>
+    <div className="gameAreaContainer flexMeRow">
+        <div className="gameDetailsContainer flexMeColumn">
+            <h3>{foundSetStatus}</h3>
+            <h3>{userTimesClicked}</h3>
+            <h3>Sets Found: {setsFound}</h3>
+            <button onClick={handleExtraRow}>Deal Extra Row</button>
+        </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (
                 <CardSlot key={eachCard.cardId} eachCard={eachCard} imgUrls={imgUrls} handleClick={handleClick}/>
             ))}
         </div>
+    </div>
     </>
     )
 }

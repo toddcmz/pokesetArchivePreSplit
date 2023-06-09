@@ -12,6 +12,10 @@ a, h3, h5{
   color: white;
 }
 
+input{
+margin: 15px;
+}
+
 .headerContainer{
   height: 60px;
   width: 100%;
@@ -45,8 +49,11 @@ a, h3, h5{
   flex-direction: column;
 }
 
-.demoAllCardsContainer{
+.gameDetailsContainer{
   justify-content: space-evenly;
+  height: 300px;
+  width: 300px;
+  padding-left: 20px;
 }
 
 .outerCard{
