@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import CardSlot from "./CardSlot"
 import MakeDeck from './TheDeck'
+import { useNavigate } from "react-router-dom"
 
 export type Card = {
     cardId:number
@@ -12,6 +13,10 @@ export type Card = {
 
 export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
 
+    const navigate = useNavigate()
+
+    const base_api_url = import.meta.env.VITE_APP_BASE_API
+    
     // use state to show status of selections, maybe?
     const [foundSetStatus, setFoundSetStatus] = useState<string>('Awaiting game start')
 
@@ -134,6 +139,29 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
         setExtraRow(extraRow+1)
     }
 
+    // for now, this is just triggering the use effect to stop playing,
+    // submit your score to the backend, and take you to the scores 
+    // summary page...gotta figure out type of e on button click here...
+    async function handleSubmitGame(e){
+        e.preventDefault()
+        const res = await fetch(`${base_api_url}/newScore`,{
+            method:'POST',
+            headers : {
+                'Content-Type' : 'application/json',
+            },
+            body:JSON.stringify({
+                user_id: 3,
+                username: 'react1',
+                sets_found:setsFound
+            })
+        })
+        if(res.ok){
+            const data = await res.json()
+            console.log(data)
+            navigate(`/highscores`)
+        }
+    }
+
     return (
     <>
     <div className="gameAreaContainer flexMeRow">
@@ -142,6 +170,7 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
             <h3>{userTimesClicked}</h3>
             <h3>Sets Found: {setsFound}</h3>
             <button onClick={handleExtraRow}>Deal Extra Row</button>
+            <button onClick={handleSubmitGame}>Submit Game</button>
         </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (

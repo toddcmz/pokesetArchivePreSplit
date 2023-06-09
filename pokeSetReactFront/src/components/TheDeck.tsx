@@ -29,5 +29,8 @@ export default function MakeDeck(){
             }
         }
     }
-    return theDeck.sort(()=> Math.random() - 0.5)
+    // I didn't like how monotone my deals often were, trying short term hack of
+    // an additional random sort for now, may look into better array randomization
+    // methods later
+    return theDeck.sort(()=> Math.random() - 0.5).sort(()=> Math.random() - 0.5)
 }
