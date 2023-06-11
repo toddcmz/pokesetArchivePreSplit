@@ -1,8 +1,12 @@
 import { Card } from './GameBoard'
 
-export default function CardSlot({eachCard, imgUrls, handleClick}:{eachCard:Card, imgUrls:string[]}) {
+interface CardSlotProps {
+  eachCard:Card
+  imgUrls:string[]
+  handleClick:(c:Card)=>void
+}
 
-
+export default function CardSlot({eachCard, imgUrls, handleClick}:CardSlotProps) {
 
   return (
     <div className="cardSlot">

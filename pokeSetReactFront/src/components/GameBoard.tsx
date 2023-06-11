@@ -31,7 +31,9 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
     const [setsFound, setSetsFound] = useState(0)
 
     // make the original game deck, this is constructed in TheDeck component
+    // Dane says just delete second arg. look up leave or delete comma as well
     const[deckCards, setDeckCards] = useState<Card[]>(MakeDeck())
+    console.log(setDeckCards) 
 
     //this controls how many extra rows can be added and is mostly proof of concept
     const[extraRow, setExtraRow] = useState(0)
@@ -142,7 +144,7 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
     // for now, this is just triggering the use effect to stop playing,
     // submit your score to the backend, and take you to the scores 
     // summary page...gotta figure out type of e on button click here...
-    async function handleSubmitGame(e){
+    async function handleSubmitGame(e:React.MouseEvent<HTMLButtonElement>){
         e.preventDefault()
         const res = await fetch(`${base_api_url}/newScore`,{
             method:'POST',
