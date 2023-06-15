@@ -20,7 +20,8 @@ export default function CardSlot({eachCard, imgUrls, handleClick}:CardSlotProps)
             for that card. wanted urls to come in as part of the eachCard object,
             something about the timing over which everythign happens wasn't right
             Approach is just ot subset the already fetched URLS array by the position
-            assigned to that card (0, 1, or 2) as determined during deck building */}
+            assigned to that card (0, 1, or 2) as determined during deck building *
+                  Upgrade: change this to for loop from 0 to cardPmonCount*/}
             {eachCard.cardPmonCount===1?
             <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
             :
