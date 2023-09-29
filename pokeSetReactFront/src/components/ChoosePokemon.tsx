@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import GameBoard from "./GameBoard"
-
+import allPokemonList from "../utils/allPokemonList.json"
 
 export default function ChoosePokemon() {
 
@@ -16,6 +16,7 @@ export default function ChoosePokemon() {
         const pmon1Name = pmon1Field.current?.value
         const pmon2Name = pmon2Field.current?.value
         const pmon3Name = pmon3Field.current?.value
+        
 
         const res1 = await fetch(`https://pokeapi.co/api/v2/pokemon/${pmon1Name}`)
         const res2 = await fetch(`https://pokeapi.co/api/v2/pokemon/${pmon2Name}`)
@@ -37,6 +38,24 @@ export default function ChoosePokemon() {
             setPmonImages(pmonImages => [...pmonImages, imageSourceUrl3])
         }
     }
+
+    async function handleSurpriseMeButton(){
+        const pokeList:string[] = allPokemonList
+
+        let num1 = Math.floor(Math.random() * (386 - 0))
+        let num2 = num1
+        while (num2 === num1){
+            num2 = Math.floor(Math.random() * (386 - 0))
+        }
+        let num3 = num1
+        while (num3 === num1 || num3 === num2){
+            num3 = Math.floor(Math.random() * (386 - 0))
+        }
+
+        console.log(num1, num2, num3)
+        console.log(pokeList[0])
+    }
+
   return (
     <>
 
@@ -51,6 +70,7 @@ export default function ChoosePokemon() {
             <input type="text" placeholder="Pokemon 3" ref={pmon3Field}/>
             <button>Catch 'em!</button>
         </form>
+        <button onClick={handleSurpriseMeButton}>Surprise Me</button>
         <GameBoard imgUrls={pmonImages}/>
     </>
   )
