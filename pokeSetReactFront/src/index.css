@@ -49,14 +49,9 @@ margin: 15px;
   flex-direction: column;
 }
 
-.gameDetailsContainer{
-  justify-content: space-evenly;
-  height: 300px;
-  width: 300px;
-  padding-left: 20px;
-}
 
-.outerCard{
+
+/* .outerCard{
   height: 225px;
   width: 115px;
   border-radius: 10px;
@@ -66,14 +61,14 @@ margin: 15px;
   border: 3px white solid;
 }
 
-.outerCard:active{
+.outerCardActive{
   border: 3px yellow solid;
-}
+} */
 
 .setCard{
   border-radius: 10px;
-  height: 220px;
-  width: 110px;
+  height: 110px;
+  width: 220px;
   justify-content: space-evenly;
   align-items: center;
   margin: 5px 5px 5px 5px;
@@ -108,25 +103,47 @@ margin: 15px;
   width: 70px;
 }
 
-/* this is the container for the entire board */
+/* gameboard containers */
+
+.gameAreaContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.gameDetailsContainer{
+  justify-content: space-evenly;
+  height: 300px;
+  width: 250px;
+  padding-left: 20px;
+  padding-right: 40px;
+}
+
 .gameBoardContainer{
-  height: 750px;
+  height: 550px;
   width: 600px;
-  margin: auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 1em;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
 }
 
 /* these are the spots on the board where cards will be placed
 This does not include styling for the card itself. */
 .cardSlot{
 border-radius: 5px;
-height: 230px;
-width: 120px;
+height: 120px;
+width: 230px;
+margin: 5px 5px 5px 5px;
 }
 
 .cardSlot:hover{
   background-color: white;
+}
+
+.cardSlotSelected{
+  border-radius: 5px;
+  height: 120px;
+  width: 230px;
+  margin: 5px 5px 5px 5px;
+  background-color: yellow;
 }

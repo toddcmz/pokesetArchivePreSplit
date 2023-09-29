@@ -23,10 +23,6 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
     // this will hold the cards the user clicks on while playing
     const [userSelections, setUserSelections] = useState<Card[]>([])
 
-    // this will help the user keep track of where they are in set choosing, probably
-    // a temporary way of handling this for now
-    const [userTimesClicked, setUserTimesClicked] = useState<string>("Cards clicked: 0")
-
     //keep track of total sets found this game
     const [setsFound, setSetsFound] = useState(0)
 
@@ -71,57 +67,62 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
                 setFoundSetStatus("Yay! That's a valid set!")
                 setSetsFound(setsFound + 1)
                 setUserSelections([])
-                setUserTimesClicked("Cards clicked: 0")
-                // can I add code here to filter the board by the card IDs that were a set?
-                // let's try that to show removal from board...
-                setBoardCards((boardCards) => boardCards.filter(
-                    (card)=> card.cardId !== userSelections[0].cardId 
-                    && 
-                    card.cardId !== userSelections[1].cardId 
-                    && 
-                    card.cardId !== userSelections[2].cardId
-                    )
-                )
-                // okay, that filters out a found set just fine...can I add more cards to 
-                // board cards? sadly it does rearrange the board, which I don't want, but
-                // my gut is telling me that might end up being a bit of a thorny issue...
 
+                // if we have standard size board, replace found cards with new cards from deck
+                if(boardCards.length === 12){
+                    setBoardCards((boardCards) => boardCards.map(
+                        (card) => {
+                            if(card.cardId === userSelections[0].cardId){
+                                return deckCards[deckPointer]
+                            }else if(card.cardId === userSelections[1].cardId){
+                                return deckCards[deckPointer+1]
+                            }else if(card.cardId === userSelections[2].cardId){
+                                return deckCards[deckPointer+2]
+                            }else{
+                                return card
+                            }
+                        }
+                    ))
+                    // if we've dealt new cards, update the deck pointer so next deal starts in correct place
+                    setDeckPointer(deckPointer+3)
+                }
+                // if board is larger than standard (extra rows have been added)
+                // then don't deal new cards, just collapse down - this can use original
+                // "new board" code.
+                if(boardCards.length > 12){
+                    setBoardCards((boardCards) => boardCards.filter(
+                        (card)=> card.cardId !== userSelections[0].cardId 
+                        && 
+                        card.cardId !== userSelections[1].cardId 
+                        && 
+                        card.cardId !== userSelections[2].cardId
+                        )
+                    )
+                }
             // otherwise not a valid set
             }else{
                 setFoundSetStatus("Sorry, that's not a set. Try again.")
                 setUserSelections([])
-                setUserTimesClicked("Cards clicked: 0")
             }
         // update message states if there's 2 cards in the array
         }else if(userSelections.length === 2 || userSelections.length === 1){
-            setUserTimesClicked(`Cards clicked: ${userSelections.length}`)
             setFoundSetStatus('Player is choosing cards...')
         }
         // otherwise the array is empty and we do nothing.
     },[userSelections])
-
-    // this use effect fills in the spots on the board when a valid set is found
-    useEffect(()=>{
-        if(boardCards.length === 9){
-            setBoardCards([...boardCards, 
-                            deckCards[deckPointer], 
-                            deckCards[deckPointer+1],
-                            deckCards[deckPointer+2]])
-            //then update the deck pointer
-            setDeckPointer(deckPointer + 3)
-        }
-    },[boardCards])
-
+    
     // this will handle the extra row request. !==0 handles game start, where
     // there should not be an extra row
     useEffect(()=>{
-        if(extraRow !==0 && boardCards.length < 14){
+        if(extraRow !==0 && boardCards.length < 18){
             setBoardCards([...boardCards, 
                             deckCards[deckPointer], 
                             deckCards[deckPointer+1],
                             deckCards[deckPointer+2]])
             //then update the deck pointer
             setDeckPointer(deckPointer + 3)
+        }else if (extraRow !== 0){
+            console.log("extra row not allowed")
         }
     },[extraRow])
 
@@ -129,7 +130,10 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
     // generate a newly shuffled deck. This could be useful.
 
     function handleClick(selectedCard:Card):void{
-        setUserSelections(userSelections => [...userSelections, selectedCard])
+        // disallow same card to be clicked multiple times
+        if(!userSelections.includes(selectedCard)){
+            setUserSelections(userSelections => [...userSelections, selectedCard])
+        }
     }
 
     // this just forces the state of extra row to change every time the button is clicked.
@@ -166,17 +170,16 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
 
     return (
     <>
-    <div className="gameAreaContainer flexMeRow">
+    <div className="gameAreaContainer">
         <div className="gameDetailsContainer flexMeColumn">
             <h3>{foundSetStatus}</h3>
-            <h3>{userTimesClicked}</h3>
             <h3>Sets Found: {setsFound}</h3>
             <button onClick={handleExtraRow}>Deal Extra Row</button>
             <button onClick={handleSubmitGame}>Submit Game</button>
         </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (
-                <CardSlot key={eachCard.cardId} eachCard={eachCard} imgUrls={imgUrls} handleClick={handleClick}/>
+                <CardSlot key={eachCard.cardId} eachCard={eachCard} imgUrls={imgUrls} handleClick={handleClick} userSelections={userSelections}/>
             ))}
         </div>
     </div>

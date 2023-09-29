@@ -4,14 +4,15 @@ interface CardSlotProps {
   eachCard:Card
   imgUrls:string[]
   handleClick:(c:Card)=>void
+  userSelections:Card[]
 }
 
-export default function CardSlot({eachCard, imgUrls, handleClick}:CardSlotProps) {
+export default function CardSlot({eachCard, imgUrls, handleClick, userSelections}:CardSlotProps) {
 
   return (
-    <div className="cardSlot">
+    <div className={userSelections.includes(eachCard)? "cardSlotSelected" : "cardSlot"}>
         {/* Outer div is the whole card, with css styling provided through props from eachCard */}
-        <div className={`setCard flexMeColumn 
+        <div className={`setCard flexMeRow 
                         cardBack${eachCard.cardBack} 
                         cardBorder${eachCard.cardBorder}`
                     }
