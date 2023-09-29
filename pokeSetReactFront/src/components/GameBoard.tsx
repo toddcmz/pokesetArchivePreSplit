@@ -11,12 +11,18 @@ export type Card = {
     cardPmonImgUrl:number
 }
 
-export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
+type Props = {
+    imgUrls:string[]
+    setIsPlaying: (bool: boolean) => void
+    pmonNameList:string[]
+}
+
+export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
 
     const navigate = useNavigate()
 
     const base_api_url = import.meta.env.VITE_APP_BASE_API
-    
+
     // use state to show status of selections, maybe?
     const [foundSetStatus, setFoundSetStatus] = useState<string>('Awaiting game start')
 
@@ -168,14 +174,26 @@ export default function GameBoard({imgUrls}:{imgUrls:string[]}) {
         }
     }
 
+    // this re-renders gameboard by altering the state
+    function handleStartOver(){
+        setIsPlaying(false)
+    }
+
     return (
     <>
     <div className="gameAreaContainer">
         <div className="gameDetailsContainer flexMeColumn">
+            <h3>You're playing with: {pmonNameList[0].toUpperCase()} 
+                <br/> 
+                {pmonNameList[1].toUpperCase()}
+                <br/>
+                {pmonNameList[2].toUpperCase()}
+            </h3>
             <h3>{foundSetStatus}</h3>
             <h3>Sets Found: {setsFound}</h3>
             <button onClick={handleExtraRow}>Deal Extra Row</button>
             <button onClick={handleSubmitGame}>Submit Game</button>
+            <button onClick={handleStartOver}>Start Over</button>
         </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (
