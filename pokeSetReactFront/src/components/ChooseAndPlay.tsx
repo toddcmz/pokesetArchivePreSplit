@@ -53,15 +53,15 @@ export default function ChoosePokemon() {
 
     async function handleSurpriseMeButton(){
         const pokeList:string[] = allPokemonList
-
-        let num1 = Math.floor(Math.random() * (386 - 0))
+        // math.floor(math.random() * max), where max is exclusive. so should go to 384.
+        let num1 = Math.floor(Math.random() * (385))
         let num2 = num1
         while (num2 === num1){
-            num2 = Math.floor(Math.random() * (386 - 0))
+            num2 = Math.floor(Math.random() * (385))
         }
         let num3 = num1
         while (num3 === num1 || num3 === num2){
-            num3 = Math.floor(Math.random() * (386 - 0))
+            num3 = Math.floor(Math.random() * (385))
         }
 
         const pmon1Name = pokeList[num1]
@@ -75,7 +75,6 @@ export default function ChoosePokemon() {
         }
 
         await retrieveSprites(pmon1Name, pmon2Name, pmon3Name)
-        console.log(pmon1Name, pmon2Name, pmon3Name)
     }
 
     async function retrieveSprites(pmon1Name:string|undefined, pmon2Name:string|undefined, pmon3Name:string|undefined){
