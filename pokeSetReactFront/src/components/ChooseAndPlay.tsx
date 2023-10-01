@@ -113,14 +113,14 @@ export default function ChoosePokemon() {
                 <h5>Warning: choose pkmn validation not yet implemented. Pkmn through emerald gen are available.</h5>
                 <h5>Refresh page and choose new pkmn if not all cards display a sprite.</h5>
             </div>
-            <div className="pokemonSelectors">
+            <div className="pokemonSelectorsContainer">
             <form onSubmit={handleChoosePokemonForm}>
                 <input type="text" placeholder="Pokemon 1" ref={pmon1Field}/>
                 <input type="text" placeholder="Pokemon 2" ref={pmon2Field}/>
                 <input type="text" placeholder="Pokemon 3" ref={pmon3Field}/>
-                <button className="pmonSelectorButtons">Catch 'em!</button>
+                <button className="pmonSelectorButtons allAppButtons">Catch 'em!</button>
             </form>
-            <button className="pmonSelectorButtons" onClick={handleSurpriseMeButton}>Surprise Me</button>
+            <button className="pmonSelectorButtons allAppButtons" onClick={handleSurpriseMeButton}>Surprise Me</button>
             </div>
         </>
         }

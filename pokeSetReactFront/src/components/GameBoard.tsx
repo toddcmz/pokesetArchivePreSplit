@@ -183,17 +183,25 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     <>
     <div className="gameAreaContainer">
         <div className="gameDetailsContainer flexMeColumn">
-            <h3>You're playing with: {pmonNameList[0].toUpperCase()} 
-                <br/> 
-                {pmonNameList[1].toUpperCase()}
-                <br/>
-                {pmonNameList[2].toUpperCase()}
+            <h3>You're playing with:
+                <span className="thisGamePmonInfo">
+                    <img className="pmonSpriteTiny" src={`${imgUrls[0]}`} alt="" /> 
+                    {pmonNameList[0].toUpperCase()} 
+                </span>
+                <span className="thisGamePmonInfo">
+                    <img className="pmonSpriteTiny" src={`${imgUrls[1]}`} alt="" />
+                    {pmonNameList[1].toUpperCase()}
+                </span>
+                <span className="thisGamePmonInfo">
+                    <img className="pmonSpriteTiny" src={`${imgUrls[2]}`} alt="" />
+                    {pmonNameList[2].toUpperCase()}
+                </span>
             </h3>
             <h3>{foundSetStatus}</h3>
             <h3>Sets Found: {setsFound}</h3>
-            <button onClick={handleExtraRow}>Deal Extra Row</button>
-            <button onClick={handleSubmitGame}>Submit Game</button>
-            <button onClick={handleStartOver}>Start Over</button>
+            <button className="allAppButtons duringPlayButtons" onClick={handleExtraRow}>Deal Extra Row</button>
+            <button className="allAppButtons duringPlayButtons" onClick={handleSubmitGame}>Submit Game</button>
+            <button className="allAppButtons duringPlayButtons" onClick={handleStartOver}>Start Over</button>
         </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (

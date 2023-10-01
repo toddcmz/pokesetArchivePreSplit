@@ -24,18 +24,18 @@ export default function CardSlot({eachCard, imgUrls, handleClick, userSelections
             assigned to that card (0, 1, or 2) as determined during deck building *
                   Upgrade: change this to for loop from 0 to cardPmonCount*/}
             {eachCard.cardPmonCount===1?
-            <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
+            <img className="pmonSprite" src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
             :
             eachCard.cardPmonCount===2?
             <>
-            <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
-            <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
+            <img className="pmonSprite" src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
+            <img className="pmonSprite" src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
             </>
             :
             <>
-            <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
-            <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
-            <img src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
+            <img className="pmonSprite" src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
+            <img className="pmonSprite" src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
+            <img className="pmonSprite" src={`${imgUrls[eachCard.cardPmonImgUrl]}`} alt="" />
             </>
             }
         </div>

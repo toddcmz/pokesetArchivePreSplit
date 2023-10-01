@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *{
   box-sizing: border-box;
   margin: 0px;
@@ -5,11 +9,11 @@
 }
 
 body{
-  background-color: rgb(140, 140, 182);
+  @apply bg-neutral1;
 }
 
-a, h3, h5{
-  color: rgb(241, 242, 243);
+h3, h5{
+  @apply text-neutral5;
 }
 
 input{
@@ -19,10 +23,11 @@ margin: 15px;
 .headerContainer{
   height: 60px;
   width: 100%;
-  background: rgb(82, 82, 131);
-  color: rgb(246, 247, 248);
   padding: 10px;
   align-items: center;
+  @apply 
+    bg-primary3
+    text-neutral1;
 }
 
 .navButton{
@@ -30,12 +35,15 @@ margin: 15px;
   height: 30px;
   width: 125px;
   text-align: center;
-  padding-top: 5px;
+  @apply text-neutral1;
 }
 
 .navButton:hover{
-  background-color: rgb(140, 140, 182);
-  border-radius: 10px;
+  @apply 
+    border-primary2 
+    border-solid 
+    border-2
+    rounded-lg;
 }
 
 .flexMeRow{
@@ -55,7 +63,7 @@ margin: 15px;
   padding: 30px 30px 0 30px;
 }
 
-.pokemonSelectors{
+.pokemonSelectorsContainer{
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -64,9 +72,27 @@ margin: 15px;
 }
 
 .pmonSelectorButtons{
-  height: 35px;
   width: 95px;
   margin-left: 15px;
+}
+
+.allAppButtons{
+  height: 40px;
+  @apply 
+    text-neutral5
+    bg-neutral2
+    rounded-md;
+}
+
+.allAppButtons:hover{
+  @apply 
+    border-neutral5
+    border-solid
+    border-2;
+}
+
+.duringPlayButtons{
+  margin-top: 15px;
 }
 
 /* card styling */
@@ -81,32 +107,45 @@ margin: 15px;
 }
 
 .cardBack0{
-  background-color: rgb(204, 224, 241);
+  @apply bg-warning1;
 }
 
 .cardBack1{
-  background-color: rgb(228, 175, 175);
+  @apply bg-primary1;
 }
 
 .cardBack2{
-  background-color: rgb(238, 238, 173);
+  @apply bg-error1;
 }
 
 .cardBorder0{
-  border: 6px rgb(112, 58, 112) dashed;
+  @apply 
+    border-dotted 
+    border-4 
+    border-primary3;
 }
 
 .cardBorder1{
-  border: 6px brown solid;
+  @apply 
+    border-solid 
+    border-4 
+    border-error3;
 }
 
 .cardBorder2{
   border: none;
 }
 
+/*Note 64x64 is default size, changing it will result in poor quality*/
 .pmonSprite{
-  height: 70px;
-  width: 70px;
+  height: 64px;
+  width: 64px;
+}
+
+.pmonSpriteTiny{
+  height: 32px;
+  width: 32px;
+  margin-right: 5px;
 }
 
 /* gameboard containers */
@@ -122,10 +161,22 @@ margin: 15px;
 
 .gameDetailsContainer{
   justify-content: space-evenly;
-  height: 300px;
+  height: 400px;
   width: 250px;
-  padding-left: 20px;
-  padding-right: 40px;
+  padding-left: 30px;
+  padding-right: 30px;
+  @apply
+    border-solid
+    border-2
+    border-neutral5
+    rounded-md;
+}
+
+.thisGamePmonInfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 5px;
 }
 
 .gameBoardContainer{
@@ -146,7 +197,7 @@ margin: 5px 5px 5px 5px;
 }
 
 .cardSlot:hover{
-  background-color: white;
+  @apply bg-neutral3;
 }
 
 .cardSlotSelected{
@@ -154,5 +205,5 @@ margin: 5px 5px 5px 5px;
   height: 120px;
   width: 230px;
   margin: 5px 5px 5px 5px;
-  background-color: yellow;
+  @apply bg-success3;
 }
