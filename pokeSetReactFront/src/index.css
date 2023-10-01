@@ -12,8 +12,12 @@ body{
   @apply bg-neutral1;
 }
 
-h3, h5{
+h1, h3, h5{
   @apply text-neutral5;
+}
+
+h1{
+  @apply text-2xl;
 }
 
 input{
@@ -25,6 +29,23 @@ margin: 15px;
   flex-direction: column;
   border: 1px solid lightblue;
 }
+
+.allAppButtons{
+  height: 40px;
+  @apply 
+    text-neutral5
+    bg-neutral2
+    rounded-md;
+}
+
+.allAppButtons:hover{
+  @apply 
+    border-neutral5
+    border-solid
+    border-2;
+}
+
+/* Header styles */
 
 .headerContainer{
   height: 60px;
@@ -65,37 +86,53 @@ margin: 15px;
 
 /* pokemon selectors */
 
+.preGameContainer{
+  max-width: 450px;
+  height: 600px;
+  margin: auto;
+  text-align: center;
+}
+
 .selectorDirectionsContainer{
-  padding: 30px 30px 0 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 160px;
+  margin-top: 25px;
+}
+
+.surpriseMeButton{
+  width: 200px;
+}
+
+.catchEmButton{
+  width: 200px;
 }
 
 .pokemonSelectorsContainer{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 30px;
+  height: 300px;
 }
 
-.pmonSelectorButtons{
-  width: 95px;
-  margin-left: 15px;
+.pmonSelectorForm{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
-.allAppButtons{
-  height: 40px;
-  @apply 
-    text-neutral5
-    bg-neutral2
-    rounded-md;
+.pmonSelectorInputField{
+  padding-left: 10px;
+  width: 250px;
 }
 
-.allAppButtons:hover{
-  @apply 
-    border-neutral5
-    border-solid
-    border-2;
-}
+
 
 .duringPlayButtons{
   margin-top: 15px;

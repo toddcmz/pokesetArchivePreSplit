@@ -107,19 +107,29 @@ export default function ChoosePokemon() {
     <>
         {!isPlaying && 
         <>
-            <div className="selectorDirectionsContainer"> 
-                <h3>Choose Pokemon</h3>
-                <h5>Warning: choose pkmn validation not yet implemented. Pkmn through emerald gen are available.</h5>
-                <h5>Refresh page and choose new pkmn if not all cards display a sprite.</h5>
-            </div>
-            <div className="pokemonSelectorsContainer">
-            <form onSubmit={handleChoosePokemonForm}>
-                <input type="text" placeholder="Pokemon 1" ref={pmon1Field}/>
-                <input type="text" placeholder="Pokemon 2" ref={pmon2Field}/>
-                <input type="text" placeholder="Pokemon 3" ref={pmon3Field}/>
-                <button className="pmonSelectorButtons allAppButtons">Catch 'em!</button>
-            </form>
-            <button className="pmonSelectorButtons allAppButtons" onClick={handleSurpriseMeButton}>Surprise Me</button>
+            <div className="preGameContainer">
+                <div className="selectorDirectionsContainer"> 
+                    <h1>Choose Pokemon</h1>
+                    <button className="surpriseMeButton pmonSelectorButtons allAppButtons" onClick={handleSurpriseMeButton}>Surprise Me</button>
+                    <h5> - Or - </h5>
+                </div>
+                <div className="pokemonSelectorsContainer">
+                <form className="pmonSelectorForm" onSubmit={handleChoosePokemonForm}>
+                    <span>
+                        <input className="pmonSelectorInputField" type="text" placeholder="Pokemon 1" ref={pmon1Field}/>
+                    </span>
+                    <span>
+                        <input className="pmonSelectorInputField" type="text" placeholder="Pokemon 2" ref={pmon2Field}/>
+                    </span>
+                    <span>
+                        <input className="pmonSelectorInputField" type="text" placeholder="Pokemon 3" ref={pmon3Field}/>
+                    </span>
+                    <span>
+                        <button className="catchEmButton pmonSelectorButtons allAppButtons">Catch 'em!</button>
+                    </span>
+                </form>
+                <h5>Current input requirements: all lower case, up to gen 3 (emerald), no blanks, no repeats.</h5>
+                </div>
             </div>
         </>
         }
