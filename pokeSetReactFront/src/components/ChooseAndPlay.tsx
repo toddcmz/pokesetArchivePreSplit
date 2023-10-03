@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+
 import GameBoard from "./GameBoard"
 import allPokemonList from "../utils/allPokemonList.json"
 
@@ -109,9 +110,9 @@ export default function ChoosePokemon() {
         <>
             <div className="preGameContainer">
                 <div className="selectorDirectionsContainer"> 
-                    <h1>Choose Pokemon</h1>
                     <button className="surpriseMeButton pmonSelectorButtons allAppButtons" onClick={handleSurpriseMeButton}>Surprise Me</button>
                     <h5> - Or - </h5>
+                    <h1>Choose Pokemon</h1>
                 </div>
                 <div className="pokemonSelectorsContainer">
                 <form className="pmonSelectorForm" onSubmit={handleChoosePokemonForm}>

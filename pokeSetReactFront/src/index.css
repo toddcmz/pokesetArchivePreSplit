@@ -4,8 +4,8 @@
 
 *{
   box-sizing: border-box;
-  margin: 0px;
-  padding: 0px;
+  margin: 0rem;
+  padding: 0rem;
 }
 
 body{
@@ -21,7 +21,7 @@ h1{
 }
 
 input{
-margin: 15px;
+margin: 1rem;
 }
 
 .spriteTest{
@@ -31,7 +31,7 @@ margin: 15px;
 }
 
 .allAppButtons{
-  height: 40px;
+  height: 2.75rem;
   @apply 
     text-neutral5
     bg-neutral2
@@ -48,9 +48,9 @@ margin: 15px;
 /* Header styles */
 
 .headerContainer{
-  height: 60px;
+  height: 4rem;
   width: 100%;
-  padding: 10px;
+  padding: 0.75rem;
   align-items: center;
   @apply 
     bg-primary3
@@ -58,9 +58,9 @@ margin: 15px;
 }
 
 .navButton{
-  margin-right: 15px;
-  height: 30px;
-  width: 125px;
+  margin-right: 1rem;
+  height: 2rem;
+  width: 8rem;
   text-align: center;
   @apply text-neutral1;
 }
@@ -87,8 +87,8 @@ margin: 15px;
 /* pokemon selectors */
 
 .preGameContainer{
-  max-width: 450px;
-  height: 600px;
+  max-width: 28rem;
+  height: 37.5rem;
   margin: auto;
   text-align: center;
 }
@@ -98,16 +98,16 @@ margin: 15px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 160px;
-  margin-top: 25px;
+  height: 10rem;
+  margin-top: 1.8rem;
 }
 
 .surpriseMeButton{
-  width: 200px;
+  width: 12.5rem;
 }
 
 .catchEmButton{
-  width: 200px;
+  width: 12.5rem;
 }
 
 .pokemonSelectorsContainer{
@@ -115,7 +115,7 @@ margin: 15px;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 300px;
+  height: 18rem;
 }
 
 .pmonSelectorForm{
@@ -128,25 +128,24 @@ margin: 15px;
 }
 
 .pmonSelectorInputField{
-  padding-left: 10px;
-  width: 250px;
+  padding-left: 1rem;
+  width: 16rem;
 }
 
-
-
 .duringPlayButtons{
-  margin-top: 15px;
+  margin-top: 1rem;
+  border: 2px solid rgb(0,0,0,0)
 }
 
 /* card styling */
 
 .setCard{
   border-radius: 10px;
-  height: 110px;
-  width: 220px;
+  height: 6.875rem;
+  width: 13.75rem;
   justify-content: space-evenly;
   align-items: center;
-  margin: 5px 5px 5px 5px;
+  margin: .3rem .3rem .3rem .3rem;
 }
 
 .cardBack0{
@@ -188,7 +187,7 @@ margin: 15px;
 .pmonSpriteTiny{
   height: 32px;
   width: 32px;
-  margin-right: 5px;
+  margin-right: .3rem;
 }
 
 /* gameboard containers */
@@ -197,17 +196,17 @@ margin: 15px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 30px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 2rem;
 }
 
 .gameDetailsContainer{
   justify-content: space-evenly;
-  height: 400px;
-  width: 250px;
-  padding-left: 30px;
-  padding-right: 30px;
+  height: 40rem;
+  width: 16rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   @apply
     border-solid
     border-2
@@ -219,12 +218,12 @@ margin: 15px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  margin-top: 5px;
+  margin-top: .25rem;
 }
 
 .gameBoardContainer{
-  height: 550px;
-  width: 600px;
+  height: 34.375rem;
+  width: 37.5rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -234,9 +233,9 @@ margin: 15px;
 This does not include styling for the card itself. */
 .cardSlot{
 border-radius: 5px;
-height: 120px;
-width: 230px;
-margin: 5px 5px 5px 5px;
+height: 7.5rem;
+width: 14.375rem;
+margin: .3rem .3rem .3rem .3rem;
 }
 
 .cardSlot:hover{
@@ -245,8 +244,8 @@ margin: 5px 5px 5px 5px;
 
 .cardSlotSelected{
   border-radius: 5px;
-  height: 120px;
-  width: 230px;
-  margin: 5px 5px 5px 5px;
+  height: 7.5rem;
+  width: 14.375rem;
+  margin: .3rem .3rem .3rem .3rem;
   @apply bg-neutral4;
 }
