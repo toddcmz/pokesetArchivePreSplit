@@ -16,7 +16,7 @@ export default {
         neutral3: "#CBC2C2",
         neutral4: "#978C8C",
         neutral5: "#665E5E",
-        success1: "#DEF1EB",
+        success1: "#B3DCD0",
         success2: "#8EC6B5",
         success3: "#4A8E7A",
         success4: "#1D604C",

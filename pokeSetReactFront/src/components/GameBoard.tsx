@@ -32,10 +32,12 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     //keep track of total sets found this game
     const [setsFound, setSetsFound] = useState(0)
 
+    //keep track of point loss
+    const [scorePenalties, setScorePenalies] = useState<number>(0)
+
     // make the original game deck, this is constructed in TheDeck component
     // Dane says just delete second arg. look up leave or delete comma as well
     const[deckCards, setDeckCards] = useState<Card[]>(MakeDeck())
-    console.log(setDeckCards) 
 
     //this controls how many extra rows can be added and is mostly proof of concept
     const[extraRow, setExtraRow] = useState(0)
@@ -55,6 +57,11 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     // starting deck to deal out.
     const[deckPointer, setDeckPointer] = useState(12)
 
+    // for tracking how many sets were found
+    const[setsPresent, setSetsPresent] = useState<string>("unclicked")
+    const[freebiesUsed, setFreebiesUsed] = useState(0)
+    const[penaltyChecksUsed, setPenaltyChecksUsed] = useState(0)
+
     //useEffect to trigger updates to the top 4 states listed above when
     // the userSelections state array has 3 cards in it. if it has 0
     // or 1 card in it, we just update the status states associated with
@@ -70,9 +77,13 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
             let spriteSet = [...new Set([userSelections[0].cardPmonImgUrl, userSelections[1].cardPmonImgUrl, userSelections[2].cardPmonImgUrl])]
             // do the comparisons to determine valid set based on above 4 objects lengths, just none of them can be of length 2.
             if(borderSet.length !== 2 && backgroundSet.length !== 2 && pokeNumSet.length !== 2 && spriteSet.length !== 2){
+                console.log(deckPointer)
                 setFoundSetStatus("Yay! That's a valid set!")
                 setSetsFound(setsFound + 1)
                 setUserSelections([])
+                // if user checked whether sets were present previously, finding any set resets state for this
+                // element so the accompanying HTML does not continue to display.
+                setSetsPresent("unclicked")
 
                 // if we have standard size board, replace found cards with new cards from deck
                 if(boardCards.length === 12){
@@ -107,7 +118,7 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
                 }
             // otherwise not a valid set
             }else{
-                setFoundSetStatus("Sorry, that's not a set. Try again.")
+                setFoundSetStatus("Sorry, that's not a set.")
                 setUserSelections([])
             }
         // update message states if there's 2 cards in the array
@@ -120,7 +131,7 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     // this will handle the extra row request. !==0 handles game start, where
     // there should not be an extra row
     useEffect(()=>{
-        if(extraRow !==0 && boardCards.length < 18){
+        if(extraRow !==0 && boardCards.length < 21){
             setBoardCards([...boardCards, 
                             deckCards[deckPointer], 
                             deckCards[deckPointer+1],
@@ -133,13 +144,61 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     },[extraRow])
 
     // I could probably add a useEffect if this works to check the deck pointer and 
-    // generate a newly shuffled deck. This could be useful.
+    // generate a newly shuffled deck. This could be useful. This basically resets
+    // the board. it would be nice to flash a message that the deck was reshuffled 
+    // when this happens. A lot of things have to be reset for this to work, I believe.
+    // was getting warning child with duplicate key cropping up after impleenting this.
+    // dont' know for sure that wasn't happening previously
+    useEffect(()=>{
+        if(deckPointer > 76){
+            setDeckCards(MakeDeck())
+            setBoardCards(deckCards.slice(0,12))
+            setDeckPointer(12)
+            setUserSelections([])
+            setExtraRow(0)
+            console.log('reshuffle triggered, made new deck and board')
+        }
+    },[deckPointer])
 
-    function handleClick(selectedCard:Card):void{
+    function selectingCards(selectedCard:Card):void{
         // disallow same card to be clicked multiple times
         if(!userSelections.includes(selectedCard)){
             setUserSelections(userSelections => [...userSelections, selectedCard])
         }
+    }
+
+    // logic for counting how many sets there are
+    function checkForSets():void{
+        
+        let totalSetsOnBoard = 0
+
+        let theseCards = boardCards
+
+        let boardSize = theseCards.length
+
+        // loop through all possible combos of 3 cards
+        for(let c1=0; c1<boardSize-2; c1++ ){
+            for(let c2=c1+1; c2<boardSize-1; c2++){
+                for(let c3=c2+1; c3<boardSize; c3++){
+                    let borderSet = new Set([theseCards[c1].cardBorder, theseCards[c2].cardBorder, theseCards[c3].cardBorder])
+                    let backgroundSet = new Set([theseCards[c1].cardBack, theseCards[c2].cardBack, theseCards[c3].cardBack])
+                    let pokeNumSet = new Set([theseCards[c1].cardPmonCount, theseCards[c2].cardPmonCount, theseCards[c3].cardPmonCount])
+                    let spriteSet = new Set([theseCards[c1].cardPmonImgUrl, theseCards[c2].cardPmonImgUrl, theseCards[c3].cardPmonImgUrl])
+                    if(borderSet.size !== 2 && backgroundSet.size !== 2 && pokeNumSet.size !== 2 && spriteSet.size !== 2){
+                        totalSetsOnBoard += 1
+                    }
+                }//end c3
+            }//end c2
+        }//end c1
+        setSetsPresent(`Sets present on board: ${totalSetsOnBoard}`)
+        // keep track of how many times user has checked for sets.
+        // idea is you get two free checks per game.
+        if(freebiesUsed < 2){
+            setFreebiesUsed(freebiesUsed + 1)
+        }else{
+            setPenaltyChecksUsed(penaltyChecksUsed + 1)
+        }
+
     }
 
     // this just forces the state of extra row to change every time the button is clicked.
@@ -149,6 +208,8 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     // included in the user score, which could be cool.
     function handleExtraRow():void{
         setExtraRow(extraRow+1)
+        // stop displaying extra sets count if another row is added
+        setSetsPresent("unclicked")
     }
 
     // for now, this is just triggering the use effect to stop playing,
@@ -183,29 +244,37 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     <>
     <div className="gameAreaContainer">
         <div className="gameDetailsContainer flexMeColumn">
+            <button className="allAppButtons duringPlayButtons" onClick={handleStartOver}>Start Over</button>
             <h3>You're playing with:
                 <span className="thisGamePmonInfo">
                     <img className="pmonSpriteTiny" src={`${imgUrls[0]}`} alt="" /> 
-                    {pmonNameList[0].toUpperCase()} 
+                    {pmonNameList[0].charAt(0).toUpperCase() + pmonNameList[0].slice(1)} 
                 </span>
                 <span className="thisGamePmonInfo">
                     <img className="pmonSpriteTiny" src={`${imgUrls[1]}`} alt="" />
-                    {pmonNameList[1].toUpperCase()}
+                    {pmonNameList[1].charAt(0).toUpperCase() + pmonNameList[1].slice(1)}
                 </span>
                 <span className="thisGamePmonInfo">
                     <img className="pmonSpriteTiny" src={`${imgUrls[2]}`} alt="" />
-                    {pmonNameList[2].toUpperCase()}
+                    {pmonNameList[2].charAt(0).toUpperCase() + pmonNameList[2].slice(1)}
                 </span>
             </h3>
+            <button className="allAppButtons duringPlayButtons" onClick={checkForSets}>Check for Sets</button>
+            <button className="allAppButtons duringPlayButtons" onClick={handleExtraRow}>Deal Extra Row</button>
+            <br/>
+            <button className="allAppButtons duringPlayButtons" onClick={handleSubmitGame}>Submit Game</button>
             <h3>{foundSetStatus}</h3>
             <h3>Sets Found: {setsFound}</h3>
-            <button className="allAppButtons duringPlayButtons" onClick={handleExtraRow}>Deal Extra Row</button>
-            <button className="allAppButtons duringPlayButtons" onClick={handleSubmitGame}>Submit Game</button>
-            <button className="allAppButtons duringPlayButtons" onClick={handleStartOver}>Start Over</button>
+            {setsPresent != "unclicked" &&
+                <h3>{setsPresent}</h3>
+            }
+            {setsPresent === "unclicked" &&
+                <h3>{`${freebiesUsed} of 2 free checks used`}</h3>
+            }
         </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (
-                <CardSlot key={eachCard.cardId} eachCard={eachCard} imgUrls={imgUrls} handleClick={handleClick} userSelections={userSelections}/>
+                <CardSlot key={eachCard.cardId} eachCard={eachCard} imgUrls={imgUrls} handleClick={selectingCards} userSelections={userSelections}/>
             ))}
         </div>
     </div>
