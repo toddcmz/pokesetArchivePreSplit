@@ -12,11 +12,15 @@ body{
   @apply bg-neutral1;
 }
 
-h1, h3, h5{
+h1, h2, h3, h5, p{
   @apply text-neutral5;
 }
 
 h1{
+  @apply text-3xl;
+}
+
+h2{
   @apply text-2xl;
 }
 
@@ -88,7 +92,7 @@ margin: 1rem;
 
 .preGameContainer{
   max-width: 28rem;
-  height: 37.5rem;
+  min-height: 40rem;
   margin: auto;
   text-align: center;
 }
@@ -98,16 +102,19 @@ margin: 1rem;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 10rem;
+  min-height: 15rem;
   margin-top: 1.8rem;
 }
 
 .surpriseMeButton{
   width: 12.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .catchEmButton{
   width: 12.5rem;
+  margin-bottom: 1rem;
 }
 
 .pokemonSelectorsContainer{
@@ -130,6 +137,10 @@ margin: 1rem;
 .pmonSelectorInputField{
   padding-left: 1rem;
   width: 16rem;
+}
+
+.errorMessage{
+  @apply text-error4;
 }
 
 .duringPlayButtons{

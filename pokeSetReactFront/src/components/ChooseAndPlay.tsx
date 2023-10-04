@@ -11,6 +11,7 @@ export default function ChoosePokemon() {
     // boolean state for conditional rendering: choose pokemon or gameboard stuff
     const [isPlaying, setIsPlaying] = useState<Boolean>(false)
     const [pmonNameList, setPmonNameList] = useState<string[]>([])
+    const [inputErrorMessage, setInputErrorMessage] = useState("")
 
     const pmon1Field = useRef<HTMLInputElement>(null)
     const pmon2Field = useRef<HTMLInputElement>(null)
@@ -32,7 +33,7 @@ export default function ChoosePokemon() {
         if((pmon1Name !== "" && pmon1Name === pmon2Name) || 
            (pmon1Name !== "" && pmon1Name === pmon3Name) || 
            (pmon2Name !== "" && pmon2Name === pmon3Name)){
-            console.log("duplicate pokemon requested, cancelling catch em")
+            setInputErrorMessage("Error: No duplicate entries allowed.")
             return
         }
 
@@ -52,14 +53,15 @@ export default function ChoosePokemon() {
 
         // check all entries are valid requests and disallow if not
         if(!allPokemonList.includes(pmon1Name) || !allPokemonList.includes(pmon2Name) || !allPokemonList.includes(pmon3Name)){
-            const notFoundPmon = [pmon1Name, pmon2Name, pmon3Name]
-            notFoundPmon.filter(pmon => {!allPokemonList.includes(pmon)})
-            console.log("one or more pokemon don't appear in our database")
+            const inputPmon= [pmon1Name, pmon2Name, pmon3Name]
+            const notFoundPmon = inputPmon.filter(pmon => !allPokemonList.includes(pmon))
+            setInputErrorMessage(`Error: The following pokemon don't appear in our database: ${[...notFoundPmon].join(", ")}.`)
             return
         }
 
         // to pass to game board to display who you're playing with
-        // at this point you should only ever have valid pmon
+        // at this point you should only ever have valid pmon. clear error message if there is one.
+        setInputErrorMessage("")
         const tempPmonNameList = [pmon1Name, pmon2Name, pmon3Name]
         setPmonNameList(tempPmonNameList)
         await retrieveSprites(pmon1Name, pmon2Name, pmon3Name)
@@ -77,7 +79,8 @@ export default function ChoosePokemon() {
         const pmon1Name = pmonList[0]
         const pmon2Name = pmonList[1]
         const pmon3Name = pmonList[2]
-
+        // clear error message if there is one
+        setInputErrorMessage("")
         await retrieveSprites(pmon1Name, pmon2Name, pmon3Name)
     }
 
@@ -113,9 +116,10 @@ export default function ChoosePokemon() {
         <>
             <div className="preGameContainer">
                 <div className="selectorDirectionsContainer"> 
+                    <h1>Play Pokeset</h1>
                     <button className="surpriseMeButton pmonSelectorButtons allAppButtons" onClick={handleSurpriseMeButton}>Surprise Me</button>
                     <h5> - Or - </h5>
-                    <h1>Choose Pokemon</h1>
+                    <h2>Choose Pokemon</h2>
                 </div>
                 <div className="pokemonSelectorsContainer">
                 <form className="pmonSelectorForm" onSubmit={handleChoosePokemonForm}>
@@ -130,9 +134,10 @@ export default function ChoosePokemon() {
                     </span>
                     <span>
                         <button className="catchEmButton pmonSelectorButtons allAppButtons">Catch 'em!</button>
+                        <p>Blanks catch a random pokemon.</p>
                     </span>
                 </form>
-                <h5>Current input requirements: all lower case, up to gen 3 (emerald), no blanks, no repeats.</h5>
+                <h5 className= "errorMessage">{inputErrorMessage}</h5>
                 </div>
             </div>
         </>

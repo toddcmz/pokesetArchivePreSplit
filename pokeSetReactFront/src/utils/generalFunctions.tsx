@@ -1,6 +1,9 @@
 import { Card } from "../components/GameBoard"
 import allPokemonList from "./allPokemonList.json"
 
+// used in getRandomPmon. Will need to find up to three random pokemon.
+const maxPmonNeeded = 3
+
 // logic for counting how many sets there are
 export function checkForSets(boardCards:Card[]):number{
     
@@ -31,7 +34,7 @@ export function checkForSets(boardCards:Card[]):number{
 // and wanted remainder random, and the number to find.
 export function getRandomPmon(pmonFound:string[]):string[]{
 
-  const numToFind = 3 - pmonFound.length
+  const numToFind = maxPmonNeeded - pmonFound.length
   
   for(let thisPmon = 1; thisPmon <= numToFind; thisPmon++){
       let randomPmon = allPokemonList[Math.floor(Math.random()*385)]

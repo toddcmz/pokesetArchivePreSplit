@@ -19,9 +19,12 @@ type Props = {
     pmonNameList:string[]
 }
 
+const standardBoardSize = 12
+
 export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
 
     const navigate = useNavigate()
+    
 
     const base_api_url = import.meta.env.VITE_APP_BASE_API
 
@@ -47,14 +50,14 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     // things like that. Maybe I can figure out how to use some sort of
     // "where in the deck are we" pointer? I suppose I could just pull a random
     // card for now. It would be nice to figure out the pointer, though.
-    const[boardCards, setBoardCards] = useState<Card[]>(deckCards.slice(0,12))
+    const[boardCards, setBoardCards] = useState<Card[]>(deckCards.slice(0,standardBoardSize))
 
     // so, let's try the pointer method for the deck to figure out where we are.
     // we could add logic down the line to generate a new deck and a new board
     // if we reach the end of the deck, probably within the useEffect. Starts
     // at twelve out of the gate, the index of the next card in the shuffled
     // starting deck to deal out.
-    const[deckPointer, setDeckPointer] = useState(12)
+    const[deckPointer, setDeckPointer] = useState(standardBoardSize)
 
     // for tracking how many sets were found, and penalties for checking
     // for sets too often or adding rows when sets are available.
@@ -87,7 +90,7 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
                 setSetsPresent("unclicked")
 
                 // if we have standard size board, replace found cards with new cards from deck
-                if(boardCards.length === 12){
+                if(boardCards.length === standardBoardSize){
                     setBoardCards((boardCards) => boardCards.map(
                         (card) => {
                             if(card.cardId === userSelections[0].cardId){
@@ -107,7 +110,7 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
                 // if board is larger than standard (extra rows have been added)
                 // then don't deal new cards, just collapse down - this can use original
                 // "new board" code.
-                if(boardCards.length > 12){
+                if(boardCards.length > standardBoardSize){
                     setBoardCards((boardCards) => boardCards.filter(
                         (card)=> card.cardId !== userSelections[0].cardId 
                         && 
@@ -130,7 +133,8 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     },[userSelections])
     
     // this will handle the extra row request. !==0 handles game start, where
-    // there should not be an extra row
+    // there should not be an extra row. 21 is max number of cards incl
+    // extra rows (technically max 3 extra rows)
     useEffect(()=>{
         if(extraRow !==0 && boardCards.length < 21){
             setBoardCards([...boardCards, 
@@ -152,12 +156,13 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
     // the board. it would be nice to flash a message that the deck was reshuffled 
     // when this happens. A lot of things have to be reset for this to work, I believe.
     // was getting warning child with duplicate key cropping up after impleenting this.
-    // dont' know for sure that wasn't happening previously
+    // dont' know for sure that wasn't happening previously. 76 was picked just because
+    // it's near the end of the deck, but not the VERY end.
     useEffect(()=>{
         if(deckPointer > 76){
             setDeckCards(MakeDeck())
-            setBoardCards(deckCards.slice(0,12))
-            setDeckPointer(12)
+            setBoardCards(deckCards.slice(0,standardBoardSize))
+            setDeckPointer(standardBoardSize)
             setUserSelections([])
             setExtraRow(0)
             console.log('reshuffle triggered, made new deck and board')
@@ -179,7 +184,7 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
             const theseSets = `Total sets on board: ${checkForSets(boardCards)}`
             setSetsPresent(theseSets)
             // keep track of how many times user has checked for sets.
-            // idea is you get two free checks per game.
+            // idea is you get three free checks per game.
             if(freebiesUsed < 3){
                 setFreebiesUsed(freebiesUsed + 1)
             }else{
