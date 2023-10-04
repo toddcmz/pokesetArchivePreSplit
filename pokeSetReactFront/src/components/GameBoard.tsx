@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import CardSlot from "./CardSlot"
 import MakeDeck from './TheDeck'
 import { useNavigate } from "react-router-dom"
+import { checkForSets } from "../utils/generalFunctions"
 
 export type Card = {
     cardId:number
@@ -11,6 +12,7 @@ export type Card = {
     cardPmonImgUrl:number
 }
 
+// for sending to gameboard
 type Props = {
     imgUrls:string[]
     setIsPlaying: (bool: boolean) => void
@@ -138,7 +140,7 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
             //then update the deck pointer
             setDeckPointer(deckPointer + 3)
             // if there are sets present, also dock points equal to number of sets present when adding row
-            let availableSetsCount = checkForSets()
+            let availableSetsCount = checkForSets(boardCards)
             setAddRowPenalty(addRowPenalty + availableSetsCount)
         }else if (extraRow !== 0){
             console.log("extra row not allowed")
@@ -171,36 +173,10 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
         }
     }
 
-    // logic for counting how many sets there are
-    function checkForSets():number{
-        
-        let totalSetsOnBoard = 0
-
-        let theseCards = boardCards
-
-        let boardSize = theseCards.length
-
-        // loop through all possible combos of 3 cards
-        for(let c1=0; c1<boardSize-2; c1++ ){
-            for(let c2=c1+1; c2<boardSize-1; c2++){
-                for(let c3=c2+1; c3<boardSize; c3++){
-                    let borderSet = new Set([theseCards[c1].cardBorder, theseCards[c2].cardBorder, theseCards[c3].cardBorder])
-                    let backgroundSet = new Set([theseCards[c1].cardBack, theseCards[c2].cardBack, theseCards[c3].cardBack])
-                    let pokeNumSet = new Set([theseCards[c1].cardPmonCount, theseCards[c2].cardPmonCount, theseCards[c3].cardPmonCount])
-                    let spriteSet = new Set([theseCards[c1].cardPmonImgUrl, theseCards[c2].cardPmonImgUrl, theseCards[c3].cardPmonImgUrl])
-                    if(borderSet.size !== 2 && backgroundSet.size !== 2 && pokeNumSet.size !== 2 && spriteSet.size !== 2){
-                        totalSetsOnBoard += 1
-                    }
-                }//end c3
-            }//end c2
-        }//end c1
-        return(totalSetsOnBoard)
-    }
-
     function handleCheckSetsClick(){
         // only do stuff if you haven't just clicked this button
         if(setsPresent === 'unclicked'){
-            const theseSets = `Total sets on board: ${checkForSets()}`
+            const theseSets = `Total sets on board: ${checkForSets(boardCards)}`
             setSetsPresent(theseSets)
             // keep track of how many times user has checked for sets.
             // idea is you get two free checks per game.
@@ -271,11 +247,6 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
                 </span>
             </h3>
             <button className="allAppButtons duringPlayButtons" onClick={handleCheckSetsClick}>Check for Sets</button>
-            <button className="allAppButtons duringPlayButtons" onClick={handleExtraRow}>Deal Extra Row</button>
-            <br/>
-            <button className="allAppButtons duringPlayButtons" onClick={handleSubmitGame}>Submit Game</button>
-            <h3>{foundSetStatus}</h3>
-            <h3>Sets Found: {setsFound}</h3>
             {setsPresent !== "unclicked" &&
                 <h3>{setsPresent}</h3>
             }
@@ -283,7 +254,13 @@ export default function GameBoard({imgUrls, setIsPlaying, pmonNameList}:Props) {
                 <h3>{`Free checks left: ${3-freebiesUsed}`}</h3>
             }
             <h3>{`Penalty set checks: ${penaltyChecksUsed}`}</h3>
+            <button className="allAppButtons duringPlayButtons" onClick={handleExtraRow}>Deal Extra Row</button>
             <h3>{`Extra row penalties: ${addRowPenalty}`}</h3>
+            <br/>
+            <button className="allAppButtons duringPlayButtons" onClick={handleSubmitGame}>Submit Game</button>
+            <h3>{foundSetStatus}</h3>
+            <h3>Sets Found: {setsFound}</h3>
+            <h3>{`Total Score: ${setsFound - penaltyChecksUsed - (addRowPenalty*0.5)}`}</h3>
         </div>
         <div className="gameBoardContainer">
             { boardCards.map(eachCard => (

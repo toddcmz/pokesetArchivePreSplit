@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 
 import GameBoard from "./GameBoard"
 import allPokemonList from "../utils/allPokemonList.json"
+import { getRandomPmon } from "../utils/generalFunctions"
 
 export default function ChoosePokemon() {
 
@@ -21,59 +22,61 @@ export default function ChoosePokemon() {
         // to lower is required for cases of correct spelling but incorrect casing
         // for the api, which requires all lower case to work. this will allow user
         // to type whatever casing they want.
-        const pmon1Name = pmon1Field.current?.value.toLowerCase()
-        const pmon2Name = pmon2Field.current?.value.toLowerCase()
-        const pmon3Name = pmon3Field.current?.value.toLowerCase()
 
-        // to pass to game board to display who you're playing with
-        if(pmon1Name && pmon2Name && pmon3Name){
-            const tempPmonNameList = [pmon1Name, pmon2Name, pmon3Name]
-            setPmonNameList(tempPmonNameList)
-        }
+        let pmon1Name = pmon1Field.current?.value.toLowerCase() || ""
+        let pmon2Name = pmon2Field.current?.value.toLowerCase() || ""
+        let pmon3Name = pmon3Field.current?.value.toLowerCase() || ""
 
-        const pokeList:string[] = allPokemonList
-
-        // check for duplicated entries and disallow
-        if(pmon1Name === pmon2Name || pmon1Name === pmon3Name || pmon2Name === pmon3Name){
+        // check for duplicated entries and disallow - but only if not blanks
+        // as duplicates
+        if((pmon1Name !== "" && pmon1Name === pmon2Name) || 
+           (pmon1Name !== "" && pmon1Name === pmon3Name) || 
+           (pmon2Name !== "" && pmon2Name === pmon3Name)){
             console.log("duplicate pokemon requested, cancelling catch em")
             return
         }
-        // check for undefined (unentered fields and disallow) - this is required
-        // to come first for the next check, valid entries, to work.
-        if(!pmon1Name || !pmon2Name || !pmon3Name){
-            console.log("field left blank, cannot submit form")
-            return
+
+        // replace blanks with random pokemon
+        if(pmon1Name === "" || pmon2Name === "" || pmon3Name === ""){
+            const tempPmonNames = [pmon1Name, pmon2Name, pmon3Name]
+            const validNames = tempPmonNames.filter(pmon => pmon !== "")
+
+            const randomNames = getRandomPmon(validNames)
+
+            randomNames.forEach(ele => {validNames.push(ele)})
+
+            pmon1Name = validNames[0]
+            pmon2Name = validNames[1]
+            pmon3Name = validNames[2]
         }
+
         // check all entries are valid requests and disallow if not
-        if(!pokeList.includes(pmon1Name) || !pokeList.includes(pmon2Name) || !pokeList.includes(pmon3Name)){
+        if(!allPokemonList.includes(pmon1Name) || !allPokemonList.includes(pmon2Name) || !allPokemonList.includes(pmon3Name)){
+            const notFoundPmon = [pmon1Name, pmon2Name, pmon3Name]
+            notFoundPmon.filter(pmon => {!allPokemonList.includes(pmon)})
             console.log("one or more pokemon don't appear in our database")
             return
         }
+
+        // to pass to game board to display who you're playing with
+        // at this point you should only ever have valid pmon
+        const tempPmonNameList = [pmon1Name, pmon2Name, pmon3Name]
+        setPmonNameList(tempPmonNameList)
         await retrieveSprites(pmon1Name, pmon2Name, pmon3Name)
     }
 
     async function handleSurpriseMeButton(){
-        const pokeList:string[] = allPokemonList
-        // math.floor(math.random() * max), where max is exclusive. so should go to 384.
-        let num1 = Math.floor(Math.random() * (385))
-        let num2 = num1
-        while (num2 === num1){
-            num2 = Math.floor(Math.random() * (385))
-        }
-        let num3 = num1
-        while (num3 === num1 || num3 === num2){
-            num3 = Math.floor(Math.random() * (385))
-        }
-
-        const pmon1Name = pokeList[num1]
-        const pmon2Name = pokeList[num2]
-        const pmon3Name = pokeList[num3]
+        
+        // passes in pokemon we already have (none in this case),
+        // which will make the function find 3 pokemon.
+        const pmonList = getRandomPmon([])
 
         // to pass to game board to display who you're playing with
-        if(pmon1Name && pmon2Name && pmon3Name){
-            const tempPmonNameList = [pmon1Name, pmon2Name, pmon3Name]
-            setPmonNameList(tempPmonNameList)
-        }
+        setPmonNameList(pmonList)
+
+        const pmon1Name = pmonList[0]
+        const pmon2Name = pmonList[1]
+        const pmon3Name = pmonList[2]
 
         await retrieveSprites(pmon1Name, pmon2Name, pmon3Name)
     }
