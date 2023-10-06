@@ -1,7 +1,6 @@
 from flask import request, jsonify
 from . import bp
 from app.models import User, Scores_Table
-from app.blueprints.api.helpers import token_required
 
 # verify a user
 @bp.post('/verifyuser')
@@ -23,10 +22,10 @@ def api_new_user():
     thisPassword = content['password']
     thisUserCheck = User.query.filter_by(username=thisUsername).first()
     if thisUserCheck:
-        return jsonify([{'message':'Username taken, try again.'}])
+        return jsonify([{'message':'An account with this username already exists, try again.'}])
     thisEmailCheck = User.query.filter_by(email=thisEmail).first()
     if thisEmailCheck:
-        return jsonify([{'message':'Email taken, try again.'}])
+        return jsonify([{'message':'An account with this email already exists, try again.'}])
     thisNewUser = User(email = thisEmail, username=thisUsername)
     thisNewUser.password = thisNewUser.hash_password(thisPassword)
     thisNewUser.add_token()
@@ -35,22 +34,19 @@ def api_new_user():
 
 # receive all game scores
 @bp.get('/scores')
-@token_required
 def api_scores():
     result = []
     # add to this list all games in database
     theseGames = Scores_Table.query.all() # .all() is returning all posts, where is post is a class
     for eachGame in theseGames:
         result.append({'game_id': eachGame.game_id,
-                       'sets_found':eachGame.sets_found,
+                       'sets_found':eachGame.game_score,
                        'game_date': eachGame.game_date,
-                       'user_id': eachGame.user_id,
                        'username': eachGame.username})
     return jsonify(result), 200 # this 200 is returning a "success" status
 
 # receive all scores from a single user
 @bp.get('/scores/<username>')
-#@token_required
 def user_scores(username):
     thisUser = User.query.filter_by(username=username).first().user_id
     if thisUser: # if they give us a username we query for it, if there's no match then the username give was invalid
@@ -58,26 +54,24 @@ def user_scores(username):
         result=[]
         for eachGame in theseGames:
             result.append({'game_id': eachGame.game_id,
-                        'sets_found':eachGame.sets_found,
+                        'sets_found':eachGame.game_score,
                         'game_date': eachGame.game_date,
-                        'user_id': eachGame.user_id,
                         'username': eachGame.username})
         return jsonify(result), 200 # this 200 is returning a "success" status
     return jsonify([{'message':"user was not found"}]), 401
 
 # Log a new completed game score
 @bp.post('/newScore')
-#@token_required
 def log_newScore():
     try:
         #receive the post data for logging a new game
         thisContent = request.json
         thisUserId = int(thisContent.get('user_id'))
         thisUsername = thisContent.get('username')
-        thisSetsFound = int(thisContent.get('sets_found'))
+        thisGameScore = int(thisContent.get('sets_found'))
         thisNewGame = Scores_Table(user_id = thisUserId,
                                    username = thisUsername,
-                                   sets_found = thisSetsFound)
+                                   game_score = thisGameScore)
         # commit post
         thisNewGame.commit()
         # return message

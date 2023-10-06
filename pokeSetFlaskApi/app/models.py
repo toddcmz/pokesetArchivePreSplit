@@ -37,7 +37,7 @@ class User(UserMixin, db.Model):
     
 class Scores_Table(db.Model):
     game_id = db.Column(db.Integer, primary_key=True)
-    sets_found = db.Column(db.Integer)
+    game_score = db.Column(db.Float)
     game_date = db.Column(db.DateTime, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     username = db.Column(db.String)

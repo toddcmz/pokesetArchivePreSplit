@@ -6,7 +6,7 @@ from app.models import User, Scores_Table
 
 @bp.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.jinja', title='Avenger Assembler')
+    return render_template('index.jinja', title='pokesetBackend')
 
 @bp.route('/addscore', methods=['GET', 'POST'])
 @login_required
@@ -17,11 +17,11 @@ def addscore():
         thisUser = User.query.filter_by(username=current_user.username).first()
         thisUsername = thisUser.username
         thisUserId = thisUser.user_id
-        thisScore = logThisGame.sets_found.data
+        thisScore = logThisGame.game_score.data
         # assign all values to teams table
         thisNewScoreEntry = Scores_Table(user_id=thisUserId, 
                                         username=thisUsername,
-                                        sets_found=thisScore)
+                                        game_score=thisScore)
         thisNewScoreEntry.commit()
         flash(f"New score {thisScore} added to {current_user.username}'s score table.", 'success')
         return redirect(url_for('main.home'))
